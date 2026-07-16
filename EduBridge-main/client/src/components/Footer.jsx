@@ -109,12 +109,20 @@ function Footer() {
           </div>
 
         
-          <{/* Support */}
+           {/* Support */}
           <div>
             <h3 style={{ color: 'white', marginBottom: '20px', fontSize: '18px', borderBottom: '2px solid #7C3AED', paddingBottom: '10px', display: 'inline-block' }}>Support</h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <li><Link to="/donate" style={{ color: '#8b9bb4', textDecoration: 'none', transition: '0.3s' }}>Donate</Link></li>
-              <li><Link to="/volunteer" style={{ color: '#8b9bb4', textDecoration: 'none', transition: '0.3s' }}>Become Volunteer</Link></li>
+              <li>
+                <Link 
+                  to="/donate" 
+                  onClick={() => window.scrollTo(0, 0)} 
+                  style={{ color: '#8b9bb4', textDecoration: 'none', transition: '0.3s' }}
+                >
+                  Donate Books
+                </Link>
+              </li>
+              <li><Link to="/volunteer" onClick={() => window.scrollTo(0, 0)} style={{ color: '#8b9bb4', textDecoration: 'none', transition: '0.3s' }}>Become Volunteer</Link></li>
               <li><button onClick={(e) => { e.preventDefault(); setActiveModal('faq'); }} style={{ background: 'none', border: 'none', color: '#8b9bb4', cursor: 'pointer', padding: 0, fontSize: '16px', textAlign: 'left' }}>FAQs</button></li>
               <li><button onClick={(e) => { e.preventDefault(); setActiveModal('privacy'); }} style={{ background: 'none', border: 'none', color: '#8b9bb4', cursor: 'pointer', padding: 0, fontSize: '16px', textAlign: 'left' }}>Privacy Policy</button></li>
               <li><button onClick={(e) => { e.preventDefault(); setActiveModal('terms'); }} style={{ background: 'none', border: 'none', color: '#8b9bb4', cursor: 'pointer', padding: 0, fontSize: '16px', textAlign: 'left' }}>Terms & Conditions</button></li>
