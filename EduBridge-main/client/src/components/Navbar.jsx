@@ -6,11 +6,13 @@ function Navbar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // 🚀 Added the Donate link right after Volunteers
   const links = [
     { path: "/", label: "🏠 Home" },
     { path: "/schools", label: "🏫 Schools" },
     { path: "/resources", label: "📚 Resources" },
     { path: "/volunteer", label: "🤝 Volunteers" },
+    { path: "/donate", label: "📖 Donate Books" }, 
     { path: "/contact", label: "📞 Contact" },
     { path: "/admin", label: "🔐 Admin" },
   ];
@@ -20,26 +22,18 @@ function Navbar() {
       <div className="navbar-container">
 
         <Link to="/" className="logo">
-
           <div className="logo-circle">
             ❤️
           </div>
-
           <div className="logo-text">
-
             <h2>HelpingHands</h2>
-
             <span>Empowering Education</span>
-
           </div>
-
         </Link>
 
         <ul className={menuOpen ? "nav-links active" : "nav-links"}>
-
           {links.map((item) => (
             <li key={item.path}>
-
               <Link
                 to={item.path}
                 className={
@@ -51,10 +45,8 @@ function Navbar() {
               >
                 {item.label}
               </Link>
-
             </li>
           ))}
-
         </ul>
 
         <button

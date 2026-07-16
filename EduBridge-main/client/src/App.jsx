@@ -7,6 +7,7 @@ import LearningResources from './pages/LearningResources'
 import VolunteerHub from './pages/VolunteerHub'
 import Contact from './pages/Contact'
 import Admin from './pages/Admin'
+import BookDonation from './pages/BookDonation' // 🚀 1. Imported the new page here
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/schools"   element={<SchoolProfile />} />
           <Route path="/resources" element={<LearningResources />} />
           <Route path="/volunteer" element={<VolunteerHub />} />
+          <Route path="/donate"    element={<BookDonation />} /> {/* 🚀 2. Added the new route here */}
           <Route path="/contact"   element={<Contact />} />
           <Route path="/admin"     element={<Admin />} />
         </Routes>
