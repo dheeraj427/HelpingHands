@@ -1,0 +1,117 @@
+.contact-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.contact-header h1 {
+  font-size: 2.2rem;
+  color: var(--navy);
+}
+
+.contact-header p {
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.contact-info h2,
+.feedback-form h2 {
+  font-size: 1.4rem;
+  color: var(--navy);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--blue);
+}
+
+.info-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  margin-bottom: 1rem;
+}
+
+.info-card p {
+  padding: 0.4rem 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.info-card h3 {
+  font-size: 1rem;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+
+.feedback-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.feedback-form input,
+.feedback-form textarea,
+.feedback-form select {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus,
+.feedback-form select:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rating-row label {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.rating-row select { flex: 1; }
+
+.feedback-form button {
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.feedback-form button:hover { background: var(--blue); }
+
+.form-msg {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--green);
+}
