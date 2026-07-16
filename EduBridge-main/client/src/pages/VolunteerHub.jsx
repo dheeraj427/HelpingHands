@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import '../styles/VolunteerHub.css'
 
-const API = import.meta.env.VITE_API_URL
+const API = import.meta.env.VITE_API_URL || 'https://helpinghands-2xly.onrender.com/api'
 
 function VolunteerHub() {
   const [volunteers, setVolunteers] = useState([])

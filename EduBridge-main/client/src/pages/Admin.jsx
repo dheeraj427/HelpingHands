@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import '../styles/Admin.css'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API = import.meta.env.VITE_API_URL || 'https://helpinghands-2xly.onrender.com/api'
 
 function ConfirmModal({ message, onConfirm, onCancel }) {
   return (

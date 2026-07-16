@@ -3,8 +3,7 @@ import axios from 'axios'
 import '../styles/SchoolProfile.css'
 
 // Fallback to local server if the environment variable is missing
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-
+const API = import.meta.env.VITE_API_URL || 'https://helpinghands-2xly.onrender.com/api'
 const emptyForm = {
   name: '', location: '', principalName: '', principalMessage: '',
   overview: '', facilities: '', contact: '', email: ''
