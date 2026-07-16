@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import '../styles/BookDonation.css' // We'll add premium styles next!
+import '../styles/BookDonation.css' 
 
 const API = import.meta.env.VITE_API_URL || 'https://helpinghands-2xly.onrender.com/api'
 
@@ -8,21 +8,20 @@ function BookDonation() {
   // Marketplace & Form States
   const [books, setBooks] = useState([])
   const [showDonateModal, setShowDonateModal] = useState(false)
-  const [filter, setFilter] = useState('all') // 'all', 'available', 'taken'
+  const [filter, setFilter] = useState('all') 
   const [donateForm, setDonateForm] = useState({ donorName: '', phone: '', bookTitle: '', quantity: 1, condition: 'good', preferredSchool: '' })
   const [formMsg, setFormMsg] = useState('')
 
   // Chatbot States
   const [isOpen, setIsOpen] = useState(false)
   const [chatHistory, setChatHistory] = useState([
-    { sender: 'bot', text: 'Hello! Welcome to HelpingHands Support. How can I help you today?', options: ['Donate a Book', 'Find Study Materials', 'Volunteer Opportunities', 'Contact Admin'] }
+    { sender: 'bot', text: 'Hello! I am Milo. Welcome to HelpingHands Support. How can I help you today?', options: ['Donate a Book', 'Find Study Materials', 'Volunteer Opportunities', 'Contact Admin'] }
   ])
 
-  // Mock data to instantly show if backend is completely empty
   const mockBooks = [
-    { _id: '1', bookTitle: 'Class 10 NCERT Mathematics', donorName: 'Ravi Kumar', quantity: 2, condition: 'Good', status: 'available', preferredSchool: 'ZPHS Vizianagaram' },
-    { _id: '2', bookTitle: 'Concepts of Physics (H.C. Verma)', donorName: 'Anjali Sharma', quantity: 1, condition: 'New', status: 'taken', preferredSchool: 'GHS Madhurawada' },
-    { _id: '3', bookTitle: 'Wren & Martin English Grammar', donorName: 'Sai Kiran', quantity: 3, condition: 'Fair', status: 'available', preferredSchool: 'GVMC School Vizag' }
+    { _id: '1', bookTitle: 'Class 10 NCERT Mathematics', donorName: 'Ravi Kumar', quantity: 2, condition: 'good', status: 'available', preferredSchool: 'ZPHS Vizianagaram' },
+    { _id: '2', bookTitle: 'Concepts of Physics (H.C. Verma)', donorName: 'Anjali Sharma', quantity: 1, condition: 'new', status: 'taken', preferredSchool: 'GHS Madhurawada' },
+    { _id: '3', bookTitle: 'Wren & Martin English Grammar', donorName: 'Sai Kiran', quantity: 3, condition: 'fair', status: 'available', preferredSchool: 'GVMC School Vizag' }
   ]
 
   useEffect(() => {
@@ -30,18 +29,25 @@ function BookDonation() {
     axios.get(`${API}/donations`)
       .then(res => {
         const fetched = res.data?.data || res.data
+        let mapped = []
         if (Array.isArray(fetched) && fetched.length > 0) {
-          // Map backend status to marketplace status
-          const mapped = fetched.map(b => ({
+          mapped = fetched.map(b => ({
             ...b,
             status: b.status === 'received' ? 'taken' : 'available'
           }))
-          setBooks(mapped)
         } else {
-          setBooks(mockBooks)
+          mapped = mockBooks
         }
+        
+        // 🚀 Fetch from Local Storage and MERGE so data doesn't vanish on refresh!
+        const localDons = JSON.parse(localStorage.getItem('localMockDonations') || '[]');
+        setBooks([...mapped, ...localDons]);
       })
-      .catch(() => setBooks(mockBooks))
+      .catch(() => {
+        // 🚀 If backend completely fails, still load local data!
+        const localDons = JSON.parse(localStorage.getItem('localMockDonations') || '[]');
+        setBooks([...mockBooks, ...localDons])
+      })
   }, [])
 
   const handleDonateSubmit = async (e) => {
@@ -58,27 +64,30 @@ function BookDonation() {
       }, 2000)
     } catch (err) {
       // Fallback to local array display if network drops
-      const localBook = { _id: Date.now().toString(), ...donateForm, status: 'available' }
+      const localBook = { _id: 'local-' + Date.now().toString(), ...donateForm, status: 'available', trackingId: 'EDU-' + Math.floor(Math.random() * 900000 + 100000) }
+      
+      // 🚀 Save to browser's Local Storage so it survives page reloads!
+      const existingLocal = JSON.parse(localStorage.getItem('localMockDonations') || '[]');
+      localStorage.setItem('localMockDonations', JSON.stringify([localBook, ...existingLocal]));
+      
       setBooks(prev => [localBook, ...prev])
       setFormMsg('✅ Listed in Test Mode successfully!')
       setTimeout(() => { setShowDonateModal(false); setFormMsg('') }, 2000)
     }
   }
 
-  // Chatbot Logic
   const handleOptionClick = (option) => {
-    // Add User response
     const userMsg = { sender: 'user', text: option }
     let botMsg = { sender: 'bot', text: '', options: [] }
 
     if (option === 'Donate a Book') {
-      botMsg.text = 'Wonderful! You can click the big "Offer a Book" button on this page to open the donor form. We collect books and distribute them to needy schools.'
+      botMsg.text = 'Wonderful! You can click the big "Offer a Book Now" button on this page to open the donor form. We collect books and distribute them to needy schools.'
       botMsg.options = ['Back to Main Options', 'Contact Admin']
     } else if (option === 'Find Study Materials') {
-      botMsg.text = 'You can find class notes, question workbooks, and NCERT links over on our "Learning Resources" tab in the navigation menu!'
+      botMsg.text = 'You can find class notes, question workbooks, and NCERT links over on our "Resources" tab in the navigation menu!'
       botMsg.options = ['Back to Main Options', 'How to download?']
     } else if (option === 'Volunteer Opportunities') {
-      botMsg.text = 'We are always looking for passionate tutors! Go to the Volunteer Hub page to submit a registration for online or offline teaching.'
+      botMsg.text = 'We are always looking for passionate tutors! Go to the Volunteer page to submit a registration for online or offline teaching.'
       botMsg.options = ['Back to Main Options']
     } else if (option === 'Contact Admin') {
       botMsg.text = 'Have specific queries? Head over to the Contact page to drop us a direct message, or email us at support@helpinghands.org.'
@@ -124,7 +133,7 @@ function BookDonation() {
               <div className="book-details">
                 <p><strong>Donor:</strong> {book.donorName}</p>
                 <p><strong>Quantity:</strong> {book.quantity} copies</p>
-                <p><strong>Condition:</strong> <span className="badge-condition">{book.condition}</span></p>
+                <p><strong>Condition:</strong> <span className="badge-condition" style={{textTransform: 'capitalize'}}>{book.condition}</span></p>
                 {book.preferredSchool && <p><strong>Target Destination:</strong> 🏫 {book.preferredSchool}</p>}
               </div>
             </div>
@@ -143,10 +152,11 @@ function BookDonation() {
               <input type="text" placeholder="Phone Number *" value={donateForm.phone} onChange={e => setDonateForm({...donateForm, phone: e.target.value})} required />
               <input type="text" placeholder="Book Title / Subject & Class *" value={donateForm.bookTitle} onChange={e => setDonateForm({...donateForm, bookTitle: e.target.value})} required />
               <input type="number" placeholder="Quantity" min="1" value={donateForm.quantity} onChange={e => setDonateForm({...donateForm, quantity: parseInt(e.target.value) || 1})} required />
+              {/* 🚀 FIXED: Lowercase values to match database schema strictly! */}
               <select value={donateForm.condition} onChange={e => setDonateForm({...donateForm, condition: e.target.value})}>
-                <option value="New">Brand New</option>
-                <option value="Good">Good / Readable</option>
-                <option value="Fair">Old / Used</option>
+                <option value="new">Brand New</option>
+                <option value="good">Good / Readable</option>
+                <option value="fair">Old / Used</option>
               </select>
               <input type="text" placeholder="Preferred Government School (Optional)" value={donateForm.preferredSchool} onChange={e => setDonateForm({...donateForm, preferredSchool: e.target.value})} />
               <button type="submit" className="submit-donation-btn">Submit to Marketplace</button>
@@ -160,12 +170,12 @@ function BookDonation() {
       <div className={`chatbot-widget ${isOpen ? 'open' : ''}`}>
         {!isOpen ? (
           <button className="chatbot-toggle-btn" onClick={() => setIsOpen(true)}>
-            💬 Ask HelpingHands Bot
+            💬 Ask Milo
           </button>
         ) : (
           <div className="chat-window">
             <div className="chat-header">
-              <h4>🤖 HelpingHands Assistant</h4>
+              <h4>🤖 Milo</h4>
               <button className="close-chat" onClick={() => setIsOpen(false)}>✕</button>
             </div>
             <div className="chat-body">
